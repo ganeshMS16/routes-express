@@ -3,6 +3,8 @@ import QUESTIONS from "../../questions.js"
 function Quiz() {
     const [userAnswers, setUserAnswers] = useState([]);
     const activeQuestionIndex = userAnswers.length;
+    const shuffledAnswers=[... QUESTIONS[activeQuestionIndex]?.answers]
+    shuffledAnswers.sort(()=>Math.random() - 0.5)
 
     const handleSelectAnswers = (selectedAnswers) => {
         setUserAnswers((prevUserAnswers) => {//take a variable to store prevUserAnswers
@@ -12,10 +14,10 @@ function Quiz() {
     return (
         <div id="quiz">
             <div id='question'>
-                <h3>{QUESTIONS[activeQuestionIndex].text}</h3>
+                <h3>{QUESTIONS[activeQuestionIndex]?.text}</h3>
                 <ul id='answers'>
                     {
-                        QUESTIONS[activeQuestionIndex].answers.map((answer, index) => {
+                       shuffledAnswers?.map((answer, index) => {
                             return (
                                 <li key={index} className='answer'>
                                     <button className='answer' onClick={() => { handleSelectAnswers(answer) }}>
