@@ -11,7 +11,6 @@ function Header() {
           onInit={(typewriter) => {
             typewriter.typeString('REACT QUIZ!')
               .callFunction(() => {
-                console.log('String typed out!');
               })
               .pauseFor(2500)
               .start(); 

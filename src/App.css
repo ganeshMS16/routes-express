@@ -339,6 +339,10 @@ header #main_heading {
   letter-spacing: 0.1rem;
 }
 
+#question-time{
+  /* border: 2px solid red; */
+  width: 20rem;
+}
 @keyframes slide-in-from-bottom {
   0% {
     opacity: 0;
