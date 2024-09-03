@@ -1,36 +1,38 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useState } from 'react';
 
-function Answers({ answers, selectedAnswers, answerState, onSelect }) {
-    const shuffledAnswers = useRef();//whole component will not rerender while direct dom manupulation happens only the ref target will change directly
+function Answers({ answers, selectedAnswers, answerState, onSelect, questionId }) {
+    const [shuffledAnswers, setShuffledAnswers] = useState([]);
 
-    if (!shuffledAnswers.current) {//when answers are not being selected initially only this is run
-        shuffledAnswers.current = [...answers]//spread orerator gives a new array by spreading all 
-        shuffledAnswers.current.sort(() => Math.random() - 0.5)//shuffling answers
-    }
+    // Shuffle answers every time the question changes
+    useEffect(() => {
+        const shuffled = [...answers].sort(() => Math.random() - 0.5);
+        setShuffledAnswers(shuffled);
+    }, [answers, questionId]); 
+
     return (
         <ul id='answers'>
-            {
-                shuffledAnswers.current?.map((answer, index) => {
-                    const isSelected = selectedAnswers === answer;//the recent or last one stored is equal to the user selected one answer
-                    let cssClass = '';
-                    if (answerState === 'answered' && isSelected) {
-                        cssClass = "selected"
+            {shuffledAnswers.map((answer, index) => {
+                const isSelected = selectedAnswers === answer;
+                let cssClass = '';
+                if (isSelected) {
+                    if (answerState === 'answered') {
+                        cssClass = 'selected';
+                    } else if (answerState === 'correct') {
+                        cssClass = 'correct';
+                    } else if (answerState === 'wrong') {
+                        cssClass = 'wrong';
                     }
-
-                    if ((answerState === "correct" || answerState === "wrong") && isSelected) {
-                        cssClass = answerState;
-                    }
-                    return (
-                        <li key={index} className='answer'>
-                            <button className={cssClass} onClick={() => { onSelect(answer) }}>
-                                {answer}
-                            </button>
-                        </li>
-                    )
-                })
-            }
+                }
+                return (
+                    <li key={index} className='answer'>
+                        <button className={cssClass} onClick={() => onSelect(answer)}>
+                            {answer}
+                        </button>
+                    </li>
+                );
+            })}
         </ul>
-    )
+    );
 }
 
-export default Answers
+export default Answers;
